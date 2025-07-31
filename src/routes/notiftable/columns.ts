@@ -8,17 +8,19 @@ import DataTableEmailButton from "./data-table-email-button.svelte";
 import { Button } from "$lib/components/ui/button"; // AI
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-
+//import  {selectedCategory} from "$lib/server/db";
 export type Payment = {
  id: string;
  amount: number;
+ municipality: string;
  status: "pending" | "processing" | "success" | "failed";
  email: string;
  date: Date;
+ details: string;
 };
- 
+
 export const columns: ColumnDef<Payment>[] = [
-  {
+ /* {
     id: "select",
     header: ({ table }) =>
       renderComponent(Checkbox, {
@@ -37,48 +39,33 @@ export const columns: ColumnDef<Payment>[] = [
       }),
     enableSorting: false,
     enableHiding: false,
-  },
- {
-  accessorKey: "status",
-  header: "Status",
- },
+  }, */
+
  {
   accessorKey: "email",
-  header: ({ column }) => 
-      renderComponent(DataTableEmailButton, {
-        onclick: column.getToggleSortingHandler(),
-      }),
+  header:"Name",
  },
  {
-  accessorKey: "amount",
+  accessorKey: "municipality",
+  header: () => {
+    const municipalityHeaderSnippet = createRawSnippet(() => ({
+      render: () => '<div class="">Municipality</div>',
+    }));
+    return renderSnippet(municipalityHeaderSnippet, "");
+ },
+},
+ {
+  accessorKey: "status",
   header: () => {
       const amountHeaderSnippet = createRawSnippet(() => ({
-        render: () => `<div class="text-right">Amount</div>`,
+        render: () => `<div class="">Status</div>`,
       }));
       return renderSnippet(amountHeaderSnippet, "");
     },
-    cell: ({ row }) => {
-      const formatter = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      });
- 
-      const amountCellSnippet = createRawSnippet<[string]>((getAmount) => {
-        const amount = getAmount();
-        return {
-          render: () => `<div class="text-right font-medium">${amount}</div>`,
-        };
-      });
-      return renderSnippet(
-        amountCellSnippet,
-        formatter.format(parseFloat(row.getValue("amount")))
-      );
-    },
  },
- 
 {
   accessorKey: "date",
-  header: "Date", // Or your preferred header setup
+  header: "Date", 
   cell: ({ row }) => {
     const dateValue: Date = row.original.date;
 
@@ -109,11 +96,4 @@ export const columns: ColumnDef<Payment>[] = [
   },
   enableSorting: true,
 },
-  {
-    id: "actions",
-    cell: ({ row }) => {
-       // You can pass whatever you need from `row.original` to the component
-      return renderComponent(DataTableActions, { id: row.original.id });
-    },
-  },
 ];

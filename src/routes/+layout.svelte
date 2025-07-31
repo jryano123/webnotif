@@ -6,11 +6,12 @@
 
 	let { children } = $props();
 </script>
-
+<div class="flex h-screen w-full">
 <Sidebar.Provider>
   <AppSidebar />
-  <main>
+  <main class="mx-8 my-6 flex-grow">
     <Sidebar.Trigger />
     {@render children?.()}
   </main>
 </Sidebar.Provider>
+</div>

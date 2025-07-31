@@ -7,14 +7,22 @@
  import * as Table from "$lib/components/ui/table/index.js";
 import type { ComponentProps } from "svelte";
 import { Button } from "$lib/components/ui/button"
+import Combobox from "$lib/components/Combobox/combobox.svelte";
 
  type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
  };
  
- let { columns, data}: DataTableProps<TData, TValue> =$props();
+ //let { columns, data, selectedMunicipality}: DataTableProps<TData, TValue> =$props();
+ let { columns, data,}: DataTableProps<TData, TValue> =$props();
+ let selectedCategory = $state<'All' |'Daytour' | 'Overnight' | 'CUS'> ('All'); // Default to All
 
+  function selectCategory(category: 'Daytour' | 'Overnight' | 'CUS' | 'All') {
+    selectedCategory = category;
+    console.log("Selected category:", selectedCategory);
+  }
+ 
  let pagination = $state<PaginationState>({pageIndex: 0, pageSize:10})
  let sorting = $state<SortingState>([]);
  let columnFilters = $state<ColumnFiltersState>([]);
@@ -86,8 +94,8 @@ import { Button } from "$lib/components/ui/button"
  });
 </script>
 
-<div class="ml-10 "> 
-  <div class="flex items-center py-4">
+<div> 
+  <div class="flex flex-column items-center py-4">
     <Input
       placeholder="Search Name..."
       value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
@@ -120,10 +128,46 @@ import { Button } from "$lib/components/ui/button"
           </DropdownMenu.CheckboxItem>
         {/each}
       </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    </DropdownMenu.Root> 
   </div>
+<div class ="ml-5"> 
+   <!-- Combobox for bataan municipalities -->
+ <Combobox />
   </div>
-<div class="rounded-md border min-w-full">
+  <!---<div class="ml-5 text-white">
+    <Button placeholder="ALL"/>
+  </div>
+-->
+<div class="ml-5 inline-flex rounded-lg border border-grey bg-white p-1">
+  <Button
+    onclick={() => selectCategory('All')}
+    class="px-4 py-2 text-sm rounded-hover bg-white text-black hover:bg-gray-100 transition-colors border-r border-grey"
+  >
+    All
+  </Button>
+  <Button
+    onclick={() => selectCategory('Daytour')}
+    class="px-4 py-2 text-sm rounded-hover bg-white text-black hover:bg-gray-100 transition-colors border-r border-grey"
+  >
+    Daytour
+  </Button>
+  <Button
+    onclick={() => selectCategory('Overnight')}
+    class="px-4 py-2 text-sm rounded-hover bg-white text-black hover:bg-gray-100 transition-colors border-r border-grey"
+  >
+    Overnight
+  </Button>
+  <Button
+    onclick={() => selectCategory('CUS')}
+    class="px-4 py-2 text-sm rounded-r-md bg-white text-black hover:bg-gray-100 transition-colors"
+  >
+    CUS
+  </Button>
+</div>
+  </div>
+
+
+<div class="rounded-md border">
   <Table.Root>
     <Table.Header>
       {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
