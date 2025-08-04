@@ -23,6 +23,14 @@ import type { Payment } from '$lib/server/db.js'; // import data from db.ts
   function selectCategory(category: 'Daytour' | 'Overnight' | 'CUS' | 'All') {
     selectedCategory = category;
     console.log("Selected category:", selectedCategory);
+
+     if (category === 'All') {
+    // If "All" is selected, clear the filter for the category column
+    table.getColumn("category")?.setFilterValue("");
+  } else {
+    // For other categories, set the filter to the selected value
+    table.getColumn("category")?.setFilterValue(category);
+  }
   }
  
  let pagination = $state<PaginationState>({pageIndex: 0, pageSize:10})
@@ -132,42 +140,43 @@ import type { Payment } from '$lib/server/db.js'; // import data from db.ts
       </DropdownMenu.Content>
     </DropdownMenu.Root> 
   </div>
+
 <div class ="ml-5"> 
    <!-- Combobox for bataan municipalities -->
- <Combobox />
+ <Combobox table={table} />
   </div>
-  <!---<div class="ml-5 text-white">
-    <Button placeholder="ALL"/>
-  </div>
--->
-<div class="ml-5 inline-flex rounded-lg border border-grey bg-white p-1">
+
+<div class="ml-5 inline-flex rounded-lg border  bg-white p-1">
   <Button
     onclick={() => selectCategory('All')}
-    class="px-4 py-2 text-sm rounded-hover bg-white text-black hover:bg-gray-100 transition-colors border-r border-grey"
-  >
+    class={`px-4 py-2 text-sm rounded-md transition-colors border-r border-grey 
+    ${selectedCategory === 'All' ? 'bg-gray-200 text-black' : 'bg-white text-black hover:bg-gray-100'}`}
+>
     All
   </Button>
   <Button
     onclick={() => selectCategory('Daytour')}
-    class="px-4 py-2 text-sm rounded-hover bg-white text-black hover:bg-gray-100 transition-colors border-r border-grey"
-  >
+   class={`px-4 py-2 text-sm rounded-md transition-colors border-r border-grey 
+    ${selectedCategory === 'Daytour' ? 'bg-gray-200 text-black' : 'bg-white text-black hover:bg-gray-100'}`}
+>
     Daytour
   </Button>
   <Button
     onclick={() => selectCategory('Overnight')}
-    class="px-4 py-2 text-sm rounded-hover bg-white text-black hover:bg-gray-100 transition-colors border-r border-grey"
-  >
+   class={`px-4 py-2 text-sm rounded-md transition-colors border-r border-grey 
+    ${selectedCategory === 'Overnight' ? 'bg-gray-200 text-black' : 'bg-white text-black hover:bg-gray-100'}`}
+>
     Overnight
   </Button>
   <Button
     onclick={() => selectCategory('CUS')}
-    class="px-4 py-2 text-sm rounded-r-md bg-white text-black hover:bg-gray-100 transition-colors"
-  >
+    class={`px-4 py-2 text-sm rounded-md transition-colors border-r border-grey 
+    ${selectedCategory === 'CUS' ? 'bg-gray-200 text-black' : 'bg-white text-black hover:bg-gray-100'}`}
+>
     CUS
   </Button>
 </div>
   </div>
-
 
 <div class="rounded-md border">
   <Table.Root>

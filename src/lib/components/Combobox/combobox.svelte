@@ -7,6 +7,8 @@
  import { Button } from "$lib/components/ui/button/index.js";
  import { cn } from "$lib/utils.js";
  
+  const { table } = $props();
+
  const municipalities = [
   { value: "Abucay", label: "Abucay" },
   { value: "Bagac", label: "Bagac" },
@@ -42,42 +44,55 @@
 </script>
  
 <Popover.Root bind:open>
- <Popover.Trigger bind:ref={triggerRef}>
-  {#snippet child({ props })}
-   <Button
-    {...props}
-    variant="outline"
-    class="w-[200px] justify-between"
-    role="combobox"
-    aria-expanded={open}
-   >
-    {selectedValue || "Select a Municipality..."}
-    <ChevronsUpDownIcon class="opacity-50" />
-   </Button>
-  {/snippet}
- </Popover.Trigger>
- <Popover.Content class="w-[200px] p-0">
-  <Command.Root>
-   <Command.Input placeholder="Search Municipality..." />
-   <Command.List>
-    <Command.Empty>No framework found.</Command.Empty>
-    <Command.Group value="frameworks">
-     {#each municipalities as framework (framework.value)}
-      <Command.Item
-       value={framework.value}
-       onSelect={() => {
-        value = framework.value;
-        closeAndFocusTrigger();
-       }}
+  <Popover.Trigger bind:ref={triggerRef}>
+    {#snippet child({ props })}
+      <Button
+        {...props}
+        variant="outline"
+        class="w-[200px] justify-between"
+        role="combobox"
+        aria-expanded={open}
       >
-       <CheckIcon
-        class={cn(value !== framework.value && "text-transparent")}
-       />
-       {framework.label}
-      </Command.Item>
-     {/each}
-    </Command.Group>
-   </Command.List>
-  </Command.Root>
- </Popover.Content>
+        {selectedValue || "Select a Municipality..."}
+        <ChevronsUpDownIcon class="opacity-50" />
+      </Button>
+    {/snippet}
+  </Popover.Trigger>
+  <Popover.Content class="w-[200px] p-0">
+    <Command.Root>
+      <Command.Input placeholder="Search Municipality..." />
+      <Command.List>
+        <Command.Empty>No Municipality found.</Command.Empty>
+        <Command.Group value="municipalities">
+          <Command.Item
+            onSelect={() => {
+              value = "";
+              closeAndFocusTrigger();
+              table.getColumn("municipality")?.setFilterValue("");
+            }}
+          >
+            <CheckIcon class={cn(value !== "" && "text-transparent")} />
+            All
+          </Command.Item>
+
+          {#each municipalities as municipality (municipality.value)}
+            <Command.Item
+              value={municipality.value}
+              onSelect={() => {
+                value = municipality.value;
+                closeAndFocusTrigger();
+                // Add this line to filter the table
+                table.getColumn("municipality")?.setFilterValue(municipality.value);
+              }}
+            >
+              <CheckIcon
+                class={cn(value !== municipality.value && "text-transparent")}
+              />
+              {municipality.label}
+            </Command.Item>
+          {/each}
+        </Command.Group>
+      </Command.List>
+    </Command.Root>
+  </Popover.Content>
 </Popover.Root>
