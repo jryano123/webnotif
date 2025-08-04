@@ -22,6 +22,10 @@ export const columns: ColumnDef<Payment>[] = [
   header:"Name",
  },
  {
+  accessorKey:"category",
+  header:"Category",
+ },
+ {
   accessorKey: "details",
   header:"Details",
    cell: (info) => {
@@ -44,15 +48,39 @@ export const columns: ColumnDef<Payment>[] = [
     return renderSnippet(municipalityHeaderSnippet, "");
  },
 },
- {
+{
   accessorKey: "status",
   header: () => {
-      const amountHeaderSnippet = createRawSnippet(() => ({
-        render: () => `<div class="">Status</div>`,
-      }));
-      return renderSnippet(amountHeaderSnippet, "");
-    },
- },
+    const amountHeaderSnippet = createRawSnippet(() => ({
+      render: () => `<div class="">Status</div>`,
+    }));
+    return renderSnippet(amountHeaderSnippet, "");
+  },
+  // Add a custom 'cell' function here
+  cell: (info) => {
+    const statusValue = info.getValue() as string;
+    let colorClass = "";
+
+    if (statusValue === "pending") {
+      colorClass = "rounded-full px-2 py-1 bg-yellow-100 text-yellow-500";
+    } else if (statusValue === "success") {
+      colorClass = "rounded-full px-2 py-1 bg-green-100 text-green-500";
+    } else if (statusValue === "failed") {
+      colorClass = "rounded-full px-2 py-1 bg-red-100 text-red-500";
+    }
+    // Note: You can add other conditions here for "failed", etc.
+
+    const statusSnippet = createRawSnippet<[string]>((getStatus) => {
+      const status = getStatus();
+      return {
+        // Use a span with the dynamic colorClass
+        render: () => `<span class="${colorClass}">${status}</span>`,
+      };
+    });
+
+    return renderSnippet(statusSnippet, statusValue);
+  },
+},
 {
   accessorKey: "date",
   header: "Date", 
