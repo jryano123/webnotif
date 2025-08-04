@@ -2,9 +2,7 @@
 
 export type Payment = {
  id: string;
- amount: number;
  status: "pending" | "processing" | "success" | "failed";
- 
  email: string;
  date: Date;
  details: string;
@@ -25,39 +23,35 @@ export type Payment = {
 export const data: Payment[] = [
  {
   id: "1a",
-  amount: 100,
   status: "pending",
   email: "luffy@example.com",
   date: new Date(),
   municipality: "Balanga City",
-  details: "",
+  details: "CrownRoyale",
  },
  {
   id: "2b",
-  amount: 125,
   status: "success",
   email: "danfeng@gmail.com",
   date: new Date(),
   municipality: "Limay",
-  details: "",
+  details: "PowerPlant",
  },
  {
   id: "3c",
-  amount: 200,
-  status: "failed",
+  status: "success",
   email: "roronoazoro@gmail.com",
   date: new Date(),
   municipality: "Orani",
-  details: "",
+  details: "Las Casas",
  },
  {
   id: "4d",
-  amount: 300,
   status: "pending",
   email: "fierajsdf@gmail.com",
   date: new Date(),
-  municipality: "Hermosa",
-  details: "",
+  municipality: "Pilar",
+  details: "Mt.Samat Cross",
  },
 ];
 

@@ -8,6 +8,7 @@
 import type { ComponentProps } from "svelte";
 import { Button } from "$lib/components/ui/button"
 import Combobox from "$lib/components/Combobox/combobox.svelte";
+import type { Payment } from '$lib/server/db.js'; // import data from db.ts
 
  type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
@@ -15,7 +16,8 @@ import Combobox from "$lib/components/Combobox/combobox.svelte";
  };
  
  //let { columns, data, selectedMunicipality}: DataTableProps<TData, TValue> =$props();
- let { columns, data,}: DataTableProps<TData, TValue> =$props();
+ let { columns, data, }: DataTableProps<TData, TValue> =$props();
+
  let selectedCategory = $state<'All' |'Daytour' | 'Overnight' | 'CUS'> ('All'); // Default to All
 
   function selectCategory(category: 'Daytour' | 'Overnight' | 'CUS' | 'All') {
@@ -107,7 +109,7 @@ import Combobox from "$lib/components/Combobox/combobox.svelte";
       }}
       class="max-w-sm"
     />
-    <div class="ml-5">
+     <div class="ml-5">
      <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
@@ -209,10 +211,6 @@ import Combobox from "$lib/components/Combobox/combobox.svelte";
 </div>
 
 <div class="flex items-center justify-end space-x-2 py-4">
-  <div class="text-muted-foreground flex-1 text-sm">
- {table.getFilteredSelectedRowModel().rows.length} of{" "}
- {table.getFilteredRowModel().rows.length} row(s) selected.
- </div>
     <Button
       variant="outline"
       size="sm"

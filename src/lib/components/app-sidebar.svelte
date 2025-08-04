@@ -7,7 +7,7 @@ import { LibraryBig } from 'lucide-svelte';
 import CalendarIcon from "@lucide/svelte/icons/calendar";
 import Layout from "../../routes/+layout.svelte";
 
-  let unreadCount = 4; // ✅ Change this to your dynamic value
+  let unreadCount = 4; //  Change this to your dynamic value
   // Menu items.
   const items = [
     {
@@ -22,7 +22,7 @@ import Layout from "../../routes/+layout.svelte";
     },
     {
       title: "Dashboard",
-      url: "#",
+      url: "/dashboard",
       icon: LayoutDashboard,
     },
     {

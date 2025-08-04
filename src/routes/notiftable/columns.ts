@@ -3,15 +3,12 @@ import { createRawSnippet } from "svelte";
 import { renderSnippet } from "$lib/components/ui/data-table/index.js";
 import { renderComponent } from "$lib/components/ui/data-table/index.js";
 import { Checkbox } from "$lib/components/ui/checkbox/index.js";
-import DataTableActions from "./data-table-actions.svelte";
-import DataTableEmailButton from "./data-table-email-button.svelte";
 import { Button } from "$lib/components/ui/button"; // AI
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 //import  {selectedCategory} from "$lib/server/db";
 export type Payment = {
  id: string;
- amount: number;
  municipality: string;
  status: "pending" | "processing" | "success" | "failed";
  email: string;
@@ -20,31 +17,24 @@ export type Payment = {
 };
 
 export const columns: ColumnDef<Payment>[] = [
- /* {
-    id: "select",
-    header: ({ table }) =>
-      renderComponent(Checkbox, {
-        checked: table.getIsAllPageRowsSelected(),
-        indeterminate:
-          table.getIsSomePageRowsSelected() &&
-          !table.getIsAllPageRowsSelected(),
-        onCheckedChange: (value) => table.toggleAllPageRowsSelected(!!value),
-        "aria-label": "Select all",
-      }),
-    cell: ({ row }) =>
-      renderComponent(Checkbox, {
-        checked: row.getIsSelected(),
-        onCheckedChange: (value) => row.toggleSelected(!!value),
-        "aria-label": "Select row",
-      }),
-    enableSorting: false,
-    enableHiding: false,
-  }, */
-
  {
   accessorKey: "email",
   header:"Name",
  },
+ {
+  accessorKey: "details",
+  header:"Details",
+   cell: (info) => {
+    const detailsValue = info.getValue() as string;
+    const detailsSnippet = createRawSnippet<[string]>((getDetails) => {
+      const details = getDetails();
+      return {
+        render: () => `<a class= "text-blue-600 hover:underline font-medium" href="/details/${details}" target="_blank" rel="noopener noreferrer">${details}</a>`,
+      };
+    });
+    return renderSnippet(detailsSnippet, detailsValue);
+  },
+},
  {
   accessorKey: "municipality",
   header: () => {
