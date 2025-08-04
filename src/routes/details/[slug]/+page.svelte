@@ -9,6 +9,7 @@
   <p>Status: {data.payment.status}</p>
   <p>Municipality: {data.payment.municipality}</p>
   <p>Email: {data.payment.email}</p>
+  <p>Category: {data.payment.category}</p>
 {:else}
   <p>Item not found.</p>
 {/if}
