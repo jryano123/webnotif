@@ -69,7 +69,7 @@ export const data: Payment[] = [
 },
 {
   id: "6f",
-  status: "failed",
+  status: "pending",
   email: "Robin@gmail.com",
   date: new Date(),
   municipality: "Morong",
